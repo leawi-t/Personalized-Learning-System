@@ -8,6 +8,9 @@ import com.Project.Personalized_Learning_System.model.Topic;
 import com.Project.Personalized_Learning_System.repository.NoteRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +40,10 @@ public class NoteService {
                 .orElseThrow(()-> new ResourceNotFoundException("Note not found")));
     }
 
-    public List<NoteResponseDto> getNoteByTopic(long topicId){
-        return mapper.noteToResponse(repo.findByTopicId(topicId));
+    public Page<NoteResponseDto> getNoteByTopic(long topicId, Pageable pageable){
+        Page<Note> page = repo.findByTopicId(topicId, pageable);
+        List<NoteResponseDto> dtos = mapper.noteToResponse(page.getContent());
+        return new PageImpl<>(dtos, page.getPageable(), page.getTotalElements());
     }
 
     public NoteDetailDto addNote(CreateNoteDto createNoteDto, long topicId, MultipartFile file){
@@ -100,7 +105,4 @@ public class NoteService {
                         "attachment; filename=\"" + note.getFileName() + "\"")
                 .body(resource);
     }
-
-
-
 }

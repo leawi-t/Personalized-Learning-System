@@ -7,6 +7,9 @@ import com.Project.Personalized_Learning_System.dto.questionDto.*;
 import com.Project.Personalized_Learning_System.dto.topicDto.*;
 import com.Project.Personalized_Learning_System.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -59,8 +62,10 @@ public class TopicController {
     }
 
     @GetMapping("/{topicId}/notes")
-    public ResponseEntity<List<NoteResponseDto>> getNotesByTopic(@PathVariable long topicId){
-        return new ResponseEntity<>(noteService.getNoteByTopic(topicId), HttpStatus.OK);
+    public ResponseEntity<Page<NoteResponseDto>> getNotesByTopic(@PathVariable long topicId, @RequestParam int pageNumber,
+                                                                 @RequestParam int numberOfItems){
+        Pageable pageable = PageRequest.of(pageNumber, numberOfItems);
+        return new ResponseEntity<>(noteService.getNoteByTopic(topicId, pageable), HttpStatus.OK);
     }
 
     @PostMapping("/{topicId}/flashcards")
