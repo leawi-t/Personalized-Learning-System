@@ -1,4 +1,4 @@
-# 🛒 Personalized Learning System
+# Personalized Learning System
 
 Spring boot personalized learning system backend that allows users to create questions, flashcards, quizes and upload and download noted from the server. in thr future it will include authentication and spring ai to generate quizes and questions based on flashcards.
 
