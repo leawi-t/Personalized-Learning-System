@@ -7,6 +7,8 @@ import com.Project.Personalized_Learning_System.model.FlashCard;
 import com.Project.Personalized_Learning_System.model.Topic;
 import com.Project.Personalized_Learning_System.repository.FlashCardRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,8 +36,8 @@ public class FlashCardService {
                 orElseThrow(()-> new ResourceNotFoundException("FlashCard not found")));
     }
 
-    public List<FlashCardDetailDto> getFlashCardByTopic(long topicId){
-        return mapper.flashCardToDetail(repo.findByTopicId(topicId));
+    public Page<FlashCardDetailDto> getFlashCardByTopic(long topicId, Pageable pageable){
+        return repo.findByTopicId(topicId, pageable).map(mapper::toDetail);
     }
 
     public List<FlashCardDetailDto> searchFlashCard(String keyword){

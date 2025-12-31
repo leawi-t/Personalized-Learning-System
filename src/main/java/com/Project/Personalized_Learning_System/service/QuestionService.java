@@ -9,6 +9,8 @@ import com.Project.Personalized_Learning_System.model.QuestionType;
 import com.Project.Personalized_Learning_System.model.Topic;
 import com.Project.Personalized_Learning_System.repository.QuestionRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,8 +43,8 @@ public class QuestionService {
                 .orElseThrow(()-> new ResourceNotFoundException("Question not Found")));
     }
 
-    public List<QuestionDetailsDto> findByTopic (long topicId){
-        return questionMapper.questionToDetail(repo.findByTopicId(topicId));
+    public Page<QuestionDetailsDto> findByTopic (long topicId, Pageable pageable){
+        return repo.findByTopicId(topicId, pageable).map(questionMapper::toDetails);
     }
 
     public List<QuestionDetailsDto> filterByDifficulty (int lDifficulty, int hDifficulty){

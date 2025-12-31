@@ -1,6 +1,8 @@
 package com.Project.Personalized_Learning_System.repository;
 
 import com.Project.Personalized_Learning_System.model.FlashCard;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,5 +21,5 @@ public interface FlashCardRepo extends JpaRepository<FlashCard, Long>{
             """)
     public List<FlashCard> searchFlashCard(String keyword);
 
-    public List<FlashCard> findByTopicId(long topicId);
+    public Page<FlashCard> findByTopicId(long topicId, Pageable pageable);
 }

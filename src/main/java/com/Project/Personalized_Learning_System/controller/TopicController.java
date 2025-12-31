@@ -52,13 +52,13 @@ public class TopicController {
     }
 
     @GetMapping("/{topicId}/flashcards")
-    public ResponseEntity<List<FlashCardDetailDto>> getFlashCardsByTopic(@PathVariable long topicId){
-        return new ResponseEntity<>(flashCardService.getFlashCardByTopic(topicId), HttpStatus.OK);
+    public ResponseEntity<Page<FlashCardDetailDto>> getFlashCardsByTopic(@PathVariable long topicId, Pageable pageable){
+        return new ResponseEntity<>(flashCardService.getFlashCardByTopic(topicId, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{topicId}/questions")
-    public ResponseEntity<List<QuestionDetailsDto>> getQuestionsByTopic(@PathVariable long topicId){
-        return new ResponseEntity<>(questionService.findByTopic(topicId), HttpStatus.OK);
+    public ResponseEntity<Page<QuestionDetailsDto>> getQuestionsByTopic(@PathVariable long topicId, Pageable pageable){
+        return new ResponseEntity<>(questionService.findByTopic(topicId, pageable), HttpStatus.OK);
     }
 
     @GetMapping("/{topicId}/notes")
