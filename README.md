@@ -30,4 +30,4 @@ Spring boot personalized learning system backend that allows users to create que
 ### Setup
 1. Clone the repo  
    ```bash
-   git clone https://github.com/leawi-t/springboot-ecommerce.git
+   git clone https://github.com/leawi-t/personalized-leraning-system.git
