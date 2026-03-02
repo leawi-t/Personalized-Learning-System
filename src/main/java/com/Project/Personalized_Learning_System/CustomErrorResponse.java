@@ -1,8 +1,6 @@
 package com.Project.Personalized_Learning_System;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.List;

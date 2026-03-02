@@ -14,7 +14,7 @@ Spring boot personalized learning system backend that allows users to create que
 ---
 
 ## ✨ Features
-- CRUD operations for user, category, topic, flash card, questions, notes and choices
+- CRUD operations for user, subject, topic, flash card, questions, notes and choices
 - upload and download endpoints for notes
 - Pagination for efficiency
 

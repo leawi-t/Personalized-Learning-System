@@ -14,7 +14,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "category")
-public class Category {
+public class Subject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

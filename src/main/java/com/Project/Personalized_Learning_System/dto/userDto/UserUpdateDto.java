@@ -5,10 +5,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 public record UserUpdateDto(
-        @NotBlank
         String username,
 
-        @NotBlank
         @Email(flags = Pattern.Flag.CASE_INSENSITIVE, message = "Invalid Email")
         String email
 ) {

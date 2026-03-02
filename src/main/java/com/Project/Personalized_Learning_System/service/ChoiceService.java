@@ -69,6 +69,4 @@ public class ChoiceService {
 
         repo.deleteById(id);
     }
-
-
 }

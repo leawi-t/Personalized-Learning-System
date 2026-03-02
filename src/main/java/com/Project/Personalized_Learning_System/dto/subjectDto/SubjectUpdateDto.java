@@ -1,9 +1,9 @@
-package com.Project.Personalized_Learning_System.dto.categoryDto;
+package com.Project.Personalized_Learning_System.dto.subjectDto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record CategoryUpdateDto(
+public record SubjectUpdateDto(
         @NotBlank String name,
         @Size(max = 255, message = "exceeded limit of 255 characters") String description
 ) {}

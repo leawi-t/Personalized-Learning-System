@@ -3,7 +3,7 @@ package com.Project.Personalized_Learning_System.service;
 import com.Project.Personalized_Learning_System.dto.topicDto.*;
 import com.Project.Personalized_Learning_System.exception.ResourceNotFoundException;
 import com.Project.Personalized_Learning_System.mapper.TopicMapper;
-import com.Project.Personalized_Learning_System.model.Category;
+import com.Project.Personalized_Learning_System.model.Subject;
 import com.Project.Personalized_Learning_System.model.Topic;
 import com.Project.Personalized_Learning_System.repository.TopicRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +16,13 @@ public class TopicService {
 
     private final TopicRepo repo;
     private final TopicMapper topicMapper;
-    private final CategoryService categoryService;
+    private final SubjectService subjectService;
 
     @Autowired
-    public TopicService(TopicRepo repo, TopicMapper topicMapper, CategoryService categoryService){
+    public TopicService(TopicRepo repo, TopicMapper topicMapper, SubjectService subjectService){
         this.repo = repo;
         this.topicMapper = topicMapper;
-        this.categoryService = categoryService;
+        this.subjectService = subjectService;
     }
 
     public Topic getTopicEntityById(long id){
@@ -49,9 +49,9 @@ public class TopicService {
 
     public TopicDetailDto addTopic(CreateTopicDto createTopicDto, long categoryId){
         System.out.println("Multipart request reached NoteService");
-        Category category = categoryService.getCategoryEntityById(categoryId);
+        Subject subject = subjectService.getCategoryEntityById(categoryId);
         Topic topic = topicMapper.toEntity(createTopicDto);
-        topic.setCategory(category);
+        topic.setSubject(subject);
         return topicMapper.toDetail(repo.save(topic));
     }
 

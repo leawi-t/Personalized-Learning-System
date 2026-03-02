@@ -1,9 +1,9 @@
-package com.Project.Personalized_Learning_System.dto.categoryDto;
+package com.Project.Personalized_Learning_System.dto.subjectDto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-public record CreateCategoryDto(
+public record SubjectRequestDto(
         @NotBlank
         String name,
 

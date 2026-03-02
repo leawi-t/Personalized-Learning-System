@@ -3,10 +3,12 @@ package com.Project.Personalized_Learning_System.dto.userDto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 
-public record CreateUserDto(
+public record UserRequestDto(
 
-        @NotBlank
+        @Size(max = 25, message = "username cannot be longer than 25 characters")
+        @NotBlank(message = "Username is required")
         String username,
 
         @NotBlank

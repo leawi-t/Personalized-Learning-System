@@ -1,8 +1,8 @@
 package com.Project.Personalized_Learning_System.controller;
 
-import com.Project.Personalized_Learning_System.dto.categoryDto.*;
+import com.Project.Personalized_Learning_System.dto.subjectDto.*;
 import com.Project.Personalized_Learning_System.dto.topicDto.*;
-import com.Project.Personalized_Learning_System.service.CategoryService;
+import com.Project.Personalized_Learning_System.service.SubjectService;
 import com.Project.Personalized_Learning_System.service.TopicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,38 +12,43 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/categories")
-public class CategoryController {
+@RequestMapping("/api/categories")
+public class SubjectController {
 
-    private final CategoryService categoryService;
+    private final SubjectService subjectService;
     private final TopicService topicService;
 
     @Autowired
-    public CategoryController(CategoryService categoryService, TopicService topicService){
-        this.categoryService = categoryService;
+    public SubjectController(SubjectService subjectService, TopicService topicService){
+        this.subjectService = subjectService;
         this.topicService = topicService;
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryResponseDto>> getAllCategories(){
-        return ResponseEntity.ok(categoryService.getAllCategories());
+    public ResponseEntity<List<SubjectResponseDto>> getAllSubjects(){
+        return ResponseEntity.ok(subjectService.getAllSubjects());
     }
 
     @GetMapping("/{categoryId}")
-    public ResponseEntity<CategoryDetailDto> getCategoryById(
+    public ResponseEntity<SubjectDetailDto> getCategoryById(
             @PathVariable long categoryId) {
 
-        return ResponseEntity.ok(categoryService.getCategoryById(categoryId));
+        return ResponseEntity.ok(subjectService.getCategoryById(categoryId));
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<CategoryResponseDto>> searchCategory(@RequestParam String keyword){
-        return new ResponseEntity<>(categoryService.searchCategory(keyword), HttpStatus.OK);
+    public ResponseEntity<List<SubjectResponseDto>> searchCategory(@RequestParam String keyword){
+        return new ResponseEntity<>(subjectService.searchCategory(keyword), HttpStatus.OK);
     }
 
     @GetMapping("/{categoryId}/topics")
     public ResponseEntity<List<TopicResponseDto>> getTopicsByCategoryId (@PathVariable long categoryId){
         return new ResponseEntity<>(topicService.getTopicByCategory(categoryId), HttpStatus.OK);
+    }
+
+    @PostMapping("/{userId}/categories")
+    public ResponseEntity<SubjectDetailDto> createCategory(@RequestBody SubjectRequestDto dto, @PathVariable long userId){
+        return new ResponseEntity<>(subjectService.addCategory(dto, userId), HttpStatus.CREATED);
     }
 
     @PostMapping("/{categoryId}/topics")
@@ -52,16 +57,16 @@ public class CategoryController {
     }
 
     @PutMapping("/{categoryId}")
-    public ResponseEntity<CategoryDetailDto> updateCategory(
-            @RequestBody CategoryUpdateDto dto,
+    public ResponseEntity<SubjectDetailDto> updateCategory(
+            @RequestBody SubjectUpdateDto dto,
             @PathVariable long categoryId) {
 
-        return ResponseEntity.ok(categoryService.updateCategory(dto, categoryId));
+        return ResponseEntity.ok(subjectService.updateCategory(dto, categoryId));
     }
 
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<Void> deleteById(@PathVariable long categoryId){
-        categoryService.deleteCategory(categoryId);
+        subjectService.deleteCategory(categoryId);
         return ResponseEntity.noContent().build();
     }
 }

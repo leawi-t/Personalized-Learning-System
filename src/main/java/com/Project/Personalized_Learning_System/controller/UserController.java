@@ -1,12 +1,14 @@
 package com.Project.Personalized_Learning_System.controller;
 
-import com.Project.Personalized_Learning_System.dto.categoryDto.CategoryDetailDto;
-import com.Project.Personalized_Learning_System.dto.categoryDto.CategoryResponseDto;
-import com.Project.Personalized_Learning_System.dto.categoryDto.CreateCategoryDto;
+import com.Project.Personalized_Learning_System.dto.subjectDto.SubjectDetailDto;
+import com.Project.Personalized_Learning_System.dto.subjectDto.SubjectResponseDto;
 import com.Project.Personalized_Learning_System.dto.userDto.*;
-import com.Project.Personalized_Learning_System.service.CategoryService;
+import com.Project.Personalized_Learning_System.service.SubjectService;
 import com.Project.Personalized_Learning_System.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,21 +16,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/users")
+@RequiredArgsConstructor
+@RequestMapping("/api/users")
 public class UserController {
 
     private final UserService userService;
-    private final CategoryService categoryService;
-
-    @Autowired
-    public UserController(UserService userService, CategoryService categoryService){
-        this.userService = userService;
-        this.categoryService = categoryService;
-    }
 
     @GetMapping
-    public ResponseEntity<List<UserResponseDto>> getAllUser(){
-        return new ResponseEntity<>(userService.getAllUsers(), HttpStatus.OK);
+    public ResponseEntity<PagedModel<UserResponseDto>> getAllUsers(Pageable pageable){
+        Page<UserResponseDto> page = userService.getAllUsers(pageable);
+        return ResponseEntity.ok(new PagedModel<>(page));
     }
 
     @GetMapping("/{userId}")
@@ -46,24 +43,9 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserByEmail(email), HttpStatus.OK);
     }
 
-    @GetMapping("/{userId}/categories")
-    public ResponseEntity<List<CategoryResponseDto>> getCategoriesByUser(@PathVariable long userId){
-        return new ResponseEntity<>(categoryService.getCategoryByUser(userId), HttpStatus.OK);
-    }
-
-    @GetMapping("/{userId}/categories/{categoryId}")
-    public ResponseEntity<CategoryDetailDto> getSpecificCategoryByUser(@PathVariable long userId, @PathVariable long categoryId){
-        return new ResponseEntity<>(categoryService.findByUserIdAndId(userId, categoryId), HttpStatus.OK);
-    }
-
     @PostMapping
-    public ResponseEntity<UserDetailsDto> createUser(@RequestBody CreateUserDto dto){
+    public ResponseEntity<UserDetailsDto> createUser(@RequestBody UserRequestDto dto){
         return new ResponseEntity<>(userService.createUser(dto), HttpStatus.CREATED);
-    }
-
-    @PostMapping("/{userId}/categories")
-    public ResponseEntity<CategoryDetailDto> createCategory(@RequestBody CreateCategoryDto dto, @PathVariable long userId){
-        return new ResponseEntity<>(categoryService.addCategory(dto, userId), HttpStatus.CREATED);
     }
 
     @PutMapping("/{userId}")

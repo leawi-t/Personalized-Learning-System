@@ -1,10 +1,10 @@
-package com.Project.Personalized_Learning_System.dto.categoryDto;
+package com.Project.Personalized_Learning_System.dto.subjectDto;
 
 import com.Project.Personalized_Learning_System.dto.topicDto.TopicResponseDto;
 
 import java.util.List;
 
-public record CategoryDetailDto(
+public record SubjectDetailDto(
         long id,
         String name,
         String description,
