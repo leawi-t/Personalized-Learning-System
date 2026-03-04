@@ -14,7 +14,7 @@ public interface NoteMapper {
 
     List<NoteResponseDto> noteToResponse(List<Note> notes);
 
-    @Mapping(target = "topic.id", source = "topicId")
-    @Mapping(target = "topic.name", source = "topicName")
+    @Mapping(source = "topic.id", target = "topicId")
+    @Mapping(source = "topic.name", target = "topicName")
     NoteDetailDto toDetails(Note note);
 }

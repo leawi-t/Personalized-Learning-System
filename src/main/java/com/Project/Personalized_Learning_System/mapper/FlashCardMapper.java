@@ -10,12 +10,12 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface FlashCardMapper {
 
+    @Mapping(source = "topic.id", target = "topicId")
+    @Mapping(source = "topic.name", target = "topicName")
     FlashCardDetailDto toDetail(FlashCard flashCard);
 
     FlashCardResponseDto toResponse(FlashCard flashCard);
 
-    @Mapping(target = "topic.id", source = "topicId")
-    @Mapping(target = "topic.name", source = "topicName")
     FlashCard toEntity(FlashCardRequestDto flashCardRequestDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
