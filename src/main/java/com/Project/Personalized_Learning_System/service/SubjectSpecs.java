@@ -5,7 +5,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDateTime;
 
-public class SubjectSpec {
+public class SubjectSpecs {
     public static Specification<Subject> hasUserId(Long userId){
         return ((root, query, cb) -> {
             if (userId == null) return null;

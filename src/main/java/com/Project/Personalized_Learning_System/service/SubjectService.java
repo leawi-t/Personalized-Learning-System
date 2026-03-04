@@ -30,10 +30,10 @@ public class SubjectService {
 
     public Page<SubjectResponseDto> getSubjects(Pageable pageable, Long userId, String name, String description,
                                                 LocalDateTime start, LocalDateTime end){
-        Specification<Subject> spec = Specification.where(SubjectSpec.hasUserId(userId))
-                .and(SubjectSpec.hasDescription(description))
-                .and(SubjectSpec.hasName(name))
-                .and(SubjectSpec.dateBetween(start, end));
+        Specification<Subject> spec = Specification.where(SubjectSpecs.hasUserId(userId))
+                .and(SubjectSpecs.hasDescription(description))
+                .and(SubjectSpecs.hasName(name))
+                .and(SubjectSpecs.dateBetween(start, end));
 
         return repo.findAll(spec, pageable).map(subjectMapper::toResponse);
     }

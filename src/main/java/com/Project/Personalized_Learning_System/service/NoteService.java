@@ -6,53 +6,52 @@ import com.Project.Personalized_Learning_System.mapper.NoteMapper;
 import com.Project.Personalized_Learning_System.model.Note;
 import com.Project.Personalized_Learning_System.model.Topic;
 import com.Project.Personalized_Learning_System.repository.NoteRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Service
+@RequiredArgsConstructor
+
+//TODO: validate the file that you receive using apache tika dependency
 public class NoteService {
 
-    NoteRepo repo;
-    NoteMapper mapper;
-    TopicService topicService;
-    LocalFileStorageService fileStorageService;
+    private final NoteRepo repo;
+    private final NoteMapper mapper;
+    private final TopicService topicService;
+    private final LocalFileStorageService fileStorageService;
 
-    @Autowired
-    public NoteService(NoteRepo repo, NoteMapper mapper, TopicService topicService, LocalFileStorageService fileStorageService){
-        this.repo= repo;
-        this.topicService = topicService;
-        this.mapper = mapper;
-        this.fileStorageService = fileStorageService;
+    public Page<NoteResponseDto> getNotes(Long topicId, String name, String description,
+                                        LocalDateTime start, LocalDateTime end, Pageable pageable){
+        Specification<Note> spec = Specification.where(NoteSpecs.hasTopicId(topicId))
+                .and(NoteSpecs.hasName(name))
+                .and(NoteSpecs.hasDescription(description))
+                .and(NoteSpecs.dateBetween(start, end));
+
+        return repo.findAll(spec, pageable).map(mapper::toResponse);
     }
 
-    public NoteDetailDto getNoteById(long id){
-        return mapper.toDetails(repo.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Note not found")));
+    public NoteDetailDto getNoteById(long noteId) {
+        return mapper.toDetails(repo.findById(noteId)
+                .orElseThrow(()->new ResourceNotFoundException("Note not found")));
     }
 
-    public Page<NoteResponseDto> getNoteByTopic(long topicId, Pageable pageable){
-        Page<Note> page = repo.findByTopicId(topicId, pageable);
-        List<NoteResponseDto> dtos = mapper.noteToResponse(page.getContent());
-        return new PageImpl<>(dtos, page.getPageable(), page.getTotalElements());
-    }
-
-    public NoteDetailDto addNote(NoteRequestDto noteRequestDto, long topicId, MultipartFile file){
-        Topic topic = topicService.getTopicEntityById(topicId);
+    public NoteDetailDto addNote(NoteRequestDto dto, MultipartFile file){
+        Topic topic = topicService.getTopicEntityById(dto.topicId());
         Note note = new Note();
         String filePath = fileStorageService.saveFile(file);
 
-        note.setName(noteRequestDto.name());
-        note.setDescription(noteRequestDto.description());
+        note.setName(dto.name());
+        note.setDescription(dto.description());
         note.setTopic(topic);
 
         note.setFileName(file.getOriginalFilename());

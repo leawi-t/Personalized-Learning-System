@@ -1,5 +1,6 @@
 package com.Project.Personalized_Learning_System.model;
 
+import com.Project.Personalized_Learning_System.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "note")
-public class Note {
+public class Note extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,12 +32,6 @@ public class Note {
     private String fileType;
     private long fileSize;
     private String filePath;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topicId", nullable = false)
