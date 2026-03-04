@@ -1,72 +1,61 @@
 package com.Project.Personalized_Learning_System.controller;
 
 import com.Project.Personalized_Learning_System.dto.subjectDto.*;
-import com.Project.Personalized_Learning_System.dto.topicDto.*;
 import com.Project.Personalized_Learning_System.service.SubjectService;
-import com.Project.Personalized_Learning_System.service.TopicService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequiredArgsConstructor
+@RequestMapping("/api/subjects")
 public class SubjectController {
 
     private final SubjectService subjectService;
-    private final TopicService topicService;
-
-    @Autowired
-    public SubjectController(SubjectService subjectService, TopicService topicService){
-        this.subjectService = subjectService;
-        this.topicService = topicService;
-    }
 
     @GetMapping
-    public ResponseEntity<List<SubjectResponseDto>> getAllSubjects(){
-        return ResponseEntity.ok(subjectService.getAllSubjects());
+    public ResponseEntity<PagedModel<SubjectResponseDto>> getSubjects(
+            @RequestParam(required = false) Long userId,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String description,
+            @RequestParam(required = false) LocalDateTime start,
+            @RequestParam(required = false) LocalDateTime end,
+            Pageable pageable
+    ){
+        Page<SubjectResponseDto> page = subjectService.getSubjects(pageable, userId, name, description, start, end);
+        return ResponseEntity.ok(new PagedModel<>(page));
     }
 
-    @GetMapping("/{categoryId}")
-    public ResponseEntity<SubjectDetailDto> getCategoryById(
-            @PathVariable long categoryId) {
+    @GetMapping("/{subjectId}")
+    public ResponseEntity<SubjectDetailDto> getSubjectById(
+            @PathVariable long subjectId) {
 
-        return ResponseEntity.ok(subjectService.getCategoryById(categoryId));
+        return ResponseEntity.ok(subjectService.getSubjectById(subjectId));
     }
 
-    @GetMapping("/search")
-    public ResponseEntity<List<SubjectResponseDto>> searchCategory(@RequestParam String keyword){
-        return new ResponseEntity<>(subjectService.searchCategory(keyword), HttpStatus.OK);
+    @PostMapping // user id in dto
+    public ResponseEntity<SubjectDetailDto> createSubject(@RequestBody @Valid SubjectRequestDto dto){
+        return new ResponseEntity<>(subjectService.addSubject(dto), HttpStatus.CREATED);
     }
 
-    @GetMapping("/{categoryId}/topics")
-    public ResponseEntity<List<TopicResponseDto>> getTopicsByCategoryId (@PathVariable long categoryId){
-        return new ResponseEntity<>(topicService.getTopicByCategory(categoryId), HttpStatus.OK);
+    @PutMapping("/{subjectId}")
+    public ResponseEntity<SubjectDetailDto> updateSubject(
+            @RequestBody @Valid SubjectUpdateDto dto,
+            @PathVariable long subjectId) {
+
+        return ResponseEntity.ok(subjectService.updateSubject(dto, subjectId));
     }
 
-    @PostMapping("/{userId}/categories")
-    public ResponseEntity<SubjectDetailDto> createCategory(@RequestBody SubjectRequestDto dto, @PathVariable long userId){
-        return new ResponseEntity<>(subjectService.addCategory(dto, userId), HttpStatus.CREATED);
-    }
-
-    @PostMapping("/{categoryId}/topics")
-    public ResponseEntity<TopicDetailDto> createTopic(@RequestBody CreateTopicDto dto, @PathVariable long categoryId){
-        return new ResponseEntity<>(topicService.addTopic(dto, categoryId), HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{categoryId}")
-    public ResponseEntity<SubjectDetailDto> updateCategory(
-            @RequestBody SubjectUpdateDto dto,
-            @PathVariable long categoryId) {
-
-        return ResponseEntity.ok(subjectService.updateCategory(dto, categoryId));
-    }
-
-    @DeleteMapping("/{categoryId}")
-    public ResponseEntity<Void> deleteById(@PathVariable long categoryId){
-        subjectService.deleteCategory(categoryId);
+    @DeleteMapping("/{subjectId}")
+    public ResponseEntity<Void> deleteById(@PathVariable long subjectId){
+        subjectService.deleteSubject(subjectId);
         return ResponseEntity.noContent().build();
     }
 }

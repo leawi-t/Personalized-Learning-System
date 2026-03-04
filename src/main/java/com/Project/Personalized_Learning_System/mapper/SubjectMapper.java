@@ -11,12 +11,12 @@ public interface SubjectMapper {
 
     SubjectResponseDto toResponse(Subject subject);
 
-    List<SubjectResponseDto> toResponseList(List<Subject> categories);
+    List<SubjectResponseDto> toResponseList(List<Subject> subjects);
 
     SubjectDetailDto toDetail(Subject subject);
 
     Subject toEntity(SubjectRequestDto subjectRequestDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateCategory(SubjectUpdateDto subjectUpdateDto, @MappingTarget Subject subject);
+    void updateSubject(SubjectUpdateDto subjectUpdateDto, @MappingTarget Subject subject);
 }

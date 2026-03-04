@@ -4,7 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record SubjectUpdateDto(
-        @NotBlank String name,
-        @Size(max = 255, message = "exceeded limit of 255 characters") String description
+        String name,
+        @Size(max = 255, message = "exceeded limit of 255 characters")
+        String description
 ) {}
 

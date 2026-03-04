@@ -44,7 +44,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserDetailsDto createUser(UserRequestDto userRequestDto){
+    public UserDetailsDto registerUser(UserRequestDto userRequestDto){
         if(userRepo.findByEmail(userRequestDto.email()).isPresent()) {
             throw new EmailAlreadyInUseException("Email is already taken");
         }

@@ -6,32 +6,35 @@ import com.Project.Personalized_Learning_System.mapper.TopicMapper;
 import com.Project.Personalized_Learning_System.model.Subject;
 import com.Project.Personalized_Learning_System.model.Topic;
 import com.Project.Personalized_Learning_System.repository.TopicRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Service
+@RequiredArgsConstructor
 public class TopicService {
 
     private final TopicRepo repo;
     private final TopicMapper topicMapper;
     private final SubjectService subjectService;
 
-    @Autowired
-    public TopicService(TopicRepo repo, TopicMapper topicMapper, SubjectService subjectService){
-        this.repo = repo;
-        this.topicMapper = topicMapper;
-        this.subjectService = subjectService;
-    }
-
     public Topic getTopicEntityById(long id){
         return repo.findById(id).
                 orElseThrow(()-> new ResourceNotFoundException("Topic not found"));
     }
 
-    public List<TopicResponseDto> getAllTopics(){
-        return topicMapper.topicToResponse(repo.findAll());
+    public Page<TopicResponseDto> getTopics(Pageable pageable, Long subjectId, String name, String description, LocalDateTime start, LocalDateTime end){
+        Specification<Topic> spec = Specification.where(TopicSpecs.hasSubjectId(subjectId))
+                .and(TopicSpecs.hasName(name))
+                .and(TopicSpecs.hasDescription(description))
+                .and(TopicSpecs.dateBetween(start, end));
+
+        return repo.findAll(spec, pageable).map(topicMapper::toResponse);
     }
 
     public TopicDetailDto getTopicById(long topicId){
@@ -39,25 +42,21 @@ public class TopicService {
                 .orElseThrow(()-> new ResourceNotFoundException("Topic not found")));
     }
 
-    public List<TopicResponseDto> getTopicByCategory(long categoryId){
-        return topicMapper.topicToResponse(repo.findByCategoryId(categoryId));
-    }
+    @Transactional
+    public TopicDetailDto addTopic(TopicRequestDto dto){
+        Subject subject = subjectService.getSubjectEntityById(dto.subjectId());
+        Topic topic = topicMapper.toEntity(dto);
 
-    public List<TopicResponseDto> searchTopic (String keyword){
-        return topicMapper.topicToResponse(repo.searchTopic(keyword));
-    }
+        subject.addTopic(topic);
 
-    public TopicDetailDto addTopic(CreateTopicDto createTopicDto, long categoryId){
-        System.out.println("Multipart request reached NoteService");
-        Subject subject = subjectService.getCategoryEntityById(categoryId);
-        Topic topic = topicMapper.toEntity(createTopicDto);
-        topic.setSubject(subject);
         return topicMapper.toDetail(repo.save(topic));
     }
 
-    public TopicDetailDto updateTopic(TopicUpdateDto topicUpdateDto, long id){
-        Topic topic = repo.findById(id).orElseThrow(()-> new ResourceNotFoundException("Topic not found"));
-        topicMapper.updateTopic(topicUpdateDto, topic);
+    @Transactional
+    public TopicDetailDto updateTopic(TopicUpdateDto dto, long topicId){
+        Topic topic = repo.findById(topicId)
+                .orElseThrow(()->new ResourceNotFoundException("Topic not found"));
+        topicMapper.updateTopic(dto, topic);
         return topicMapper.toDetail(repo.save(topic));
     }
 

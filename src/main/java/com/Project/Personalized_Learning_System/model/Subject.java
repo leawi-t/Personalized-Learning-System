@@ -1,24 +1,24 @@
 package com.Project.Personalized_Learning_System.model;
 
+import com.Project.Personalized_Learning_System.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter @Setter
 @Builder
 
 @Entity
-@Table(name = "category")
-public class Subject {
+@Table(name = "subjects", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "user_id"})})
+public class Subject extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -27,9 +27,19 @@ public class Subject {
     private String description;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "userId", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Topic> topics = new ArrayList<>();
+
+    public void addTopic(Topic topic) {
+        topics.add(topic);
+        topic.setSubject(this);
+    }
+
+    public void removeTopic(Topic topic) {
+        topics.remove(topic);
+        topic.setSubject(null);
+    }
 }

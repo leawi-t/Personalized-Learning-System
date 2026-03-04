@@ -46,13 +46,13 @@ public class NoteService {
         return new PageImpl<>(dtos, page.getPageable(), page.getTotalElements());
     }
 
-    public NoteDetailDto addNote(CreateNoteDto createNoteDto, long topicId, MultipartFile file){
+    public NoteDetailDto addNote(NoteRequestDto noteRequestDto, long topicId, MultipartFile file){
         Topic topic = topicService.getTopicEntityById(topicId);
         Note note = new Note();
         String filePath = fileStorageService.saveFile(file);
 
-        note.setName(createNoteDto.name());
-        note.setDescription(createNoteDto.description());
+        note.setName(noteRequestDto.name());
+        note.setDescription(noteRequestDto.description());
         note.setTopic(topic);
 
         note.setFileName(file.getOriginalFilename());

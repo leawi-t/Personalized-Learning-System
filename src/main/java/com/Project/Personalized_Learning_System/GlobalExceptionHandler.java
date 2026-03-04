@@ -1,11 +1,11 @@
 package com.Project.Personalized_Learning_System;
 
+import com.Project.Personalized_Learning_System.exception.DuplicateEntityException;
 import com.Project.Personalized_Learning_System.exception.EmailAlreadyInUseException;
 import com.Project.Personalized_Learning_System.exception.IllegalOperationException;
 import com.Project.Personalized_Learning_System.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -39,8 +39,19 @@ public class GlobalExceptionHandler {
     public ResponseEntity<CustomErrorResponse> handleEmailAlreadyInUseException(EmailAlreadyInUseException ex){
         CustomErrorResponse errorResponse = new CustomErrorResponse(
                 LocalDateTime.now(),
-                HttpStatus.CONFLICT.value(), // Usually 409 is better for duplicates, but 400 works too
+                HttpStatus.CONFLICT.value(),
                 "Email Conflict",
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(DuplicateEntityException.class)
+    public ResponseEntity<CustomErrorResponse> handleDuplicateEntityException(DuplicateEntityException ex){
+        CustomErrorResponse errorResponse = new CustomErrorResponse(
+                LocalDateTime.now(),
+                HttpStatus.CONFLICT.value(),
+                "Duplicate entity error",
                 ex.getMessage()
         );
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);

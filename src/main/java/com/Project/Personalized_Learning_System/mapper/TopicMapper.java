@@ -14,11 +14,11 @@ public interface TopicMapper {
 
     TopicResponseDto toResponse(Topic topic);
 
-    List<TopicResponseDto> topicToResponse(List<Topic> topics);
+    List<TopicResponseDto> toResponseList(List<Topic> topics);
 
     TopicDetailDto toDetail(Topic topic);
 
-    Topic toEntity(CreateTopicDto dto);
+    Topic toEntity(TopicRequestDto dto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateTopic(TopicUpdateDto dto, @MappingTarget Topic topic);

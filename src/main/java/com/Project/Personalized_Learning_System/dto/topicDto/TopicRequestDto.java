@@ -1,18 +1,19 @@
-package com.Project.Personalized_Learning_System.dto.subjectDto;
+package com.Project.Personalized_Learning_System.dto.topicDto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public record SubjectRequestDto(
+public record TopicRequestDto(
+
         @NotNull
-        Long userId,
+        Long subjectId,
 
         @NotBlank
         @Size(max = 50, message = "Name can not be longer than 50 characters")
         String name,
 
-        @Size(max = 1000, message = "Exceeded limit of 1000 characters")
+        @Size(max = 1000, message = "Description can not be longer than 1000 characters")
         String description
-) {}
-
+) {
+}

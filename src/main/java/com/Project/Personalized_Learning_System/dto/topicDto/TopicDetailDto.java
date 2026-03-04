@@ -10,7 +10,8 @@ public record TopicDetailDto(
         long id,
         String name,
         String description,
-        long categoryId,
+        long subjectId,
+        String summary,
         List<NoteResponseDto> notes,
         List<QuestionDetailsDto> questions,
         List<FlashCardDetailDto> flashCards

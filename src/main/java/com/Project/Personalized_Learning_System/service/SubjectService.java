@@ -1,79 +1,82 @@
 package com.Project.Personalized_Learning_System.service;
 
 import com.Project.Personalized_Learning_System.dto.subjectDto.*;
+import com.Project.Personalized_Learning_System.exception.DuplicateEntityException;
 import com.Project.Personalized_Learning_System.exception.ResourceNotFoundException;
 import com.Project.Personalized_Learning_System.mapper.SubjectMapper;
 import com.Project.Personalized_Learning_System.model.Subject;
 import com.Project.Personalized_Learning_System.model.User;
 import com.Project.Personalized_Learning_System.repository.SubjectRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Service
+@RequiredArgsConstructor
 public class SubjectService {
 
     private final SubjectRepo repo;
     private final SubjectMapper subjectMapper;
     private final UserService userService;
 
-    @Autowired
-    public SubjectService(SubjectRepo repo, SubjectMapper mapper, UserService userService) {
-        this.repo = repo;
-        this.subjectMapper = mapper;
-        this.userService = userService;
+    public Subject getSubjectEntityById(long id){
+        return repo.findById(id).orElseThrow(()-> new ResourceNotFoundException("Subject not found"));
     }
 
-    public List<SubjectResponseDto> getAllCategories(){
-        return subjectMapper.toResponseList(repo.findAll());
+    public Page<SubjectResponseDto> getSubjects(Pageable pageable, Long userId, String name, String description,
+                                                LocalDateTime start, LocalDateTime end){
+        Specification<Subject> spec = Specification.where(SubjectSpec.hasUserId(userId))
+                .and(SubjectSpec.hasDescription(description))
+                .and(SubjectSpec.hasName(name))
+                .and(SubjectSpec.dateBetween(start, end));
+
+        return repo.findAll(spec, pageable).map(subjectMapper::toResponse);
     }
 
-    public Subject getCategoryEntityById(long id){
-        return repo.findById(id).orElseThrow(()-> new ResourceNotFoundException("Category not found"));
-    }
-
-    public SubjectDetailDto getCategoryById(long categoryId){
-        Subject subject = repo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category doesn't exist in the database"));
+    public SubjectDetailDto getSubjectById(long subjectId){
+        Subject subject = getSubjectEntityById(subjectId);
         return subjectMapper.toDetail(subject);
     }
 
-    public List<SubjectResponseDto> searchCategory(String keyword){
-        List<Subject> categories = repo.searchSubject(keyword);
-        return subjectMapper.toResponseList(categories);
-    }
+    @Transactional
+    public SubjectDetailDto addSubject(SubjectRequestDto dto){
+        User user = userService.getUserEntityById(dto.userId());
 
-    public List<SubjectResponseDto> getCategoryByUser(long userId){
-        List<Subject> categories = repo.findByUserId(userId);
-        return subjectMapper.toResponseList(categories);
-    }
+        if (repo.existsByNameAndUserId(dto.name(), dto.userId())){
+            throw new DuplicateEntityException("Subject with name: " + dto.name() + " Already exists");
+        }
 
-    public SubjectDetailDto findByUserIdAndId(long userId, long categoryId) {
-        return subjectMapper.toDetail(
-                repo.findByUserIdAndId(userId, categoryId)
-                        .orElseThrow(() -> new ResourceNotFoundException("Category not found"))
-        );
-    }
-
-    public SubjectDetailDto addCategory(SubjectRequestDto subjectRequestDto, long userId){
-        User user = userService.getUserEntityById(userId);
-        Subject subject = subjectMapper.toEntity(subjectRequestDto);
+        Subject subject = subjectMapper.toEntity(dto);
         subject.setUser(user);
 
         return subjectMapper.toDetail(repo.save(subject));
     }
 
-    public SubjectDetailDto updateCategory(SubjectUpdateDto dto, long categoryId){
-        Subject subject = repo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category doesn't exist in the database"));
-        subjectMapper.updateCategory(dto, subject);
+    @Transactional
+    public SubjectDetailDto updateSubject(SubjectUpdateDto dto, long subjectId){
+        Subject subject = repo.findById(subjectId)
+                .orElseThrow(()-> new ResourceNotFoundException("Subject does not exist"));
 
+        if (dto.name() != null && !dto.name().equals(subject.getName())) {
+            if (repo.existsByNameAndUserId(dto.name(), subject.getUser().getId())) {
+                throw new DuplicateEntityException("Subject with name: " + dto.name() + " already exists");
+            }
+        }
+
+        subjectMapper.updateSubject(dto, subject);
         return subjectMapper.toDetail(repo.save(subject));
     }
 
-    public void deleteCategory(long categoryId){
-        if (!repo.existsById(categoryId)) {
-            throw new ResourceNotFoundException("Category not found");
+    @Transactional
+    public void deleteSubject(long subjectId){
+        if (!repo.existsById(subjectId)) {
+            throw new ResourceNotFoundException("Subject not found");
         }
-        repo.deleteById(categoryId);
+        repo.deleteById(subjectId);
     }
 }

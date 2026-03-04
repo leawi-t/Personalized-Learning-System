@@ -27,11 +27,10 @@ public class Note {
     @Column(length = 1000)
     private String description;
 
-    // Instead of storing text, store file metadata
     private String fileName;
     private String fileType;
     private long fileSize;
-    private String filePath; // or S3 URL if you want cloud
+    private String filePath;
 
     @CreationTimestamp
     private LocalDateTime createdAt;

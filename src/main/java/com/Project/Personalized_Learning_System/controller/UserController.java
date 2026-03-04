@@ -1,10 +1,8 @@
 package com.Project.Personalized_Learning_System.controller;
 
-import com.Project.Personalized_Learning_System.dto.subjectDto.SubjectDetailDto;
-import com.Project.Personalized_Learning_System.dto.subjectDto.SubjectResponseDto;
 import com.Project.Personalized_Learning_System.dto.userDto.*;
-import com.Project.Personalized_Learning_System.service.SubjectService;
 import com.Project.Personalized_Learning_System.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,8 +10,6 @@ import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,12 +40,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDetailsDto> createUser(@RequestBody UserRequestDto dto){
-        return new ResponseEntity<>(userService.createUser(dto), HttpStatus.CREATED);
+    public ResponseEntity<UserDetailsDto> registerUser(@RequestBody @Valid UserRequestDto dto){
+        return new ResponseEntity<>(userService.registerUser(dto), HttpStatus.CREATED);
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<UserDetailsDto> updateUser(@RequestBody UserUpdateDto dto, @PathVariable long userId){
+    public ResponseEntity<UserDetailsDto> updateUser(@RequestBody @Valid UserUpdateDto dto, @PathVariable long userId){
         return new ResponseEntity<>(userService.updateUser(dto, userId), HttpStatus.OK);
     }
 
