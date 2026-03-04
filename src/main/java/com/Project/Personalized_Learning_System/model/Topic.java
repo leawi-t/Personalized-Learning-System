@@ -55,7 +55,7 @@ public class Topic extends BaseEntity {
         question.setTopic(this);
     }
 
-    public void addNote (FlashCard flashCard) {
+    public void addFlashCard( FlashCard flashCard) {
         flashCards.add(flashCard);
         flashCard.setTopic(this);
     }

@@ -6,29 +6,31 @@ import com.Project.Personalized_Learning_System.mapper.FlashCardMapper;
 import com.Project.Personalized_Learning_System.model.FlashCard;
 import com.Project.Personalized_Learning_System.model.Topic;
 import com.Project.Personalized_Learning_System.repository.FlashCardRepo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Service
+@RequiredArgsConstructor
 public class FlashCardService {
 
-    FlashCardRepo repo;
-    FlashCardMapper mapper;
-    TopicService topicService;
+    private final FlashCardRepo repo;
+    private final FlashCardMapper mapper;
+    private final TopicService topicService;
 
-    @Autowired
-    public FlashCardService(FlashCardRepo repo, FlashCardMapper mapper, TopicService topicService){
-        this.repo = repo;
-        this.mapper = mapper;
-        this.topicService = topicService;
-    }
+    public Page<FlashCardResponseDto> getFlashCards(Long topicId, String tag, Integer min, Integer max,
+                                                  LocalDateTime start, LocalDateTime end, Pageable pageable){
+        Specification<FlashCard> spec = Specification.where(FlashCardSpecs.hasTopicId(topicId))
+                .and(FlashCardSpecs.hasTag(tag))
+                .and(FlashCardSpecs.hasDate(start, end))
+                .and(FlashCardSpecs.hasDifficulty(min, max));
 
-    public List<FlashCardDetailDto> getAllFlashCards(){
-        return mapper.flashCardToDetail(repo.findAll());
+        return repo.findAll(spec, pageable).map(mapper::toResponse);
     }
 
     public FlashCardDetailDto getFlashCardById(long id){
@@ -36,22 +38,15 @@ public class FlashCardService {
                 orElseThrow(()-> new ResourceNotFoundException("FlashCard not found")));
     }
 
-    public Page<FlashCardDetailDto> getFlashCardByTopic(long topicId, Pageable pageable){
-        return repo.findByTopicId(topicId, pageable).map(mapper::toDetail);
-    }
-
-    public List<FlashCardDetailDto> searchFlashCard(String keyword){
-        return mapper.flashCardToDetail(repo.searchFlashCard(keyword));
-    }
-
-    public FlashCardDetailDto addFlashCard(CreateFlashCardDto createFlashCardDto, long topicId){
-        Topic topic = topicService.getTopicEntityById(topicId);
-        FlashCard flashCard = mapper.toEntity(createFlashCardDto);
-
-        flashCard.setTopic(topic);
+    @Transactional
+    public FlashCardDetailDto addFlashCard(FlashCardRequestDto dto){
+        Topic topic = topicService.getTopicEntityById(dto.topicId());
+        FlashCard flashCard = mapper.toEntity(dto);
+        topic.addFlashCard(flashCard);
         return mapper.toDetail(repo.save(flashCard));
     }
 
+    @Transactional
     public FlashCardDetailDto updateFlashCard(FlashCardUpdateDto updateDto, long flashCardId){
         FlashCard flashCard = repo.findById(flashCardId)
                 .orElseThrow(() -> new ResourceNotFoundException("FlashCard not found"));
@@ -60,6 +55,7 @@ public class FlashCardService {
         return mapper.toDetail(repo.save(flashCard));
     }
 
+    @Transactional
     public void deleteById(long flashCardId){
         if (!repo.existsById(flashCardId)){
             throw new ResourceNotFoundException("FlashCard not found");

@@ -4,6 +4,7 @@ import com.Project.Personalized_Learning_System.model.FlashCard;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
@@ -12,14 +13,6 @@ import java.util.List;
 // to do create a filter for difficulty
 
 @Repository
-public interface FlashCardRepo extends JpaRepository<FlashCard, Long>{
-    @Query("""
-            SELECT f FROM FlashCard f where
-            LOWER(f.tags) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                OR LOWER(f.question) LIKE LOWER(CONCAT('%', :keyword, '%'))
-                OR LOWER(f.answer) LIKE LOWER(CONCAT('%', :keyword, '%'))
-            """)
-    public List<FlashCard> searchFlashCard(String keyword);
-
-    public Page<FlashCard> findByTopicId(long topicId, Pageable pageable);
+public interface FlashCardRepo extends JpaRepository<FlashCard, Long>, JpaSpecificationExecutor<FlashCard> {
+    Page<FlashCard> findAll(Pageable pageable);
 }

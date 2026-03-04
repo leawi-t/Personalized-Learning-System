@@ -1,9 +1,11 @@
 package com.Project.Personalized_Learning_System.model;
 
+import com.Project.Personalized_Learning_System.BaseEntity;
 import jakarta.persistence.*;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,7 +13,10 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import javax.print.DocFlavor;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,33 +24,27 @@ import java.time.LocalDateTime;
 @Setter
 
 @Entity
-@Table(name = "flashCard")
-public class FlashCard {
+@Table(name = "flashcards")
+public class FlashCard extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long id;
+    private Long id;
 
     @Column(nullable = false, length = 1000)
-    String question;
+    private String question;
 
-    @Column(nullable = false, length = 500)
-    String answer;
+    @Column(nullable = false, length = 1000)
+    private String answer;
 
-    // can be improved check gpt
-    String tags;
+    @ElementCollection
+    @CollectionTable(name = "flashcard_tags", joinColumns = @JoinColumn(name = "flashcard_id"))
+    @Column(name = "tag")
+    private Set<String> tags = new HashSet<>();
 
-    @Min(1)
-    @Max(5)
-    int difficulty;
-
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private int difficulty;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "topicId", nullable = false)
-    Topic topic;
+    @JoinColumn(name = "topic_id", nullable = false)
+    private Topic topic;
 }
