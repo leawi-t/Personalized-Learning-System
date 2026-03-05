@@ -5,21 +5,14 @@ import com.Project.Personalized_Learning_System.model.QuestionType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface QuestionRepo extends JpaRepository<Question, Long> {
+public interface QuestionRepo extends JpaRepository<Question, Long>, JpaSpecificationExecutor<Question> {
 
-    @Query("""
-    SELECT q FROM Question q
-    WHERE q.difficulty BETWEEN :lDifficulty AND :hDifficulty
-""")
-    public List<Question> filterByDifficulty(int lDifficulty, int hDifficulty);
-
-    public List<Question> findByQuestionType(QuestionType type);
-
-    public Page<Question> findByTopicId(long topicId, Pageable pageable);
+    Page<Question> findAll(Pageable pageable);
 }

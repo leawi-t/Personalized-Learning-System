@@ -20,9 +20,12 @@ public class Choice {
     @Column(nullable = false, length = 1000)
     private String text;
 
+    @Column(columnDefinition = "TEXT")
+    private String explanation;
+
     private boolean correct;
 
     @ManyToOne
-    @JoinColumn(name = "questionId")
+    @JoinColumn(name = "question_id")
     private Question question;
 }

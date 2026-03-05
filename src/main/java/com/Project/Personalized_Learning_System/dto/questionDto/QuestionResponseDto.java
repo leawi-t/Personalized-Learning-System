@@ -1,17 +1,19 @@
 package com.Project.Personalized_Learning_System.dto.questionDto;
 
-import com.Project.Personalized_Learning_System.dto.choiceDto.ChoiceDetailDto;
+import com.Project.Personalized_Learning_System.dto.choiceDto.ChoiceResponseDto;
 import com.Project.Personalized_Learning_System.model.QuestionType;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
-public record QuestionDetailsDto(
+public record QuestionResponseDto(
         long id,
         String questionText,
         QuestionType questionType,
         int difficulty,
-        List<ChoiceDetailDto> choices,
+        Set<String> tags,
+        List<ChoiceResponseDto> choices,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
 ) {}

@@ -4,9 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record UpdateChoiceDto(
-        // may need id?
-        @NotBlank
-        @Size(max = 1000)
+        @Size(max = 1000, message = "exceeded the 1000 character limit")
         String text,
 
         boolean correct

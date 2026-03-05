@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(IllegalOperationException.class)
-    public ResponseEntity<CustomErrorResponse> handleIllegalArgumentException(IllegalOperationException ex) {
+    public ResponseEntity<CustomErrorResponse> handleIllegalOperationException(IllegalOperationException ex) {
         CustomErrorResponse errorResponse = new CustomErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.BAD_REQUEST.value(),

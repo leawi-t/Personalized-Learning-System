@@ -7,16 +7,12 @@ import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
-import java.util.List;
-
 @Mapper(componentModel = "spring", uses = ChoiceMapper.class)
 public interface QuestionMapper {
 
-    List<QuestionDetailsDto> questionToDetail(List<Question> questions);
+    QuestionResponseDto toResponse(Question question);
 
-    QuestionDetailsDto toDetails(Question question);
-
-    Question toEntity(CreateQuestionDto createQuestionDto);
+    Question toEntity(QuestionRequestDto questionRequestDto);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateQuestion(QuestionUpdateDto questionUpdateDto, @MappingTarget Question question);

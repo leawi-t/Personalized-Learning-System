@@ -9,9 +9,9 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface ChoiceMapper {
 
-    ChoiceDetailDto toDetail(Choice choice);
+    ChoiceResponseDto toResponse(Choice choice);
 
-    List<ChoiceDetailDto> choiceToDetail(List<Choice> choice);
+    List<ChoiceResponseDto> toResponseList(List<Choice> choice);
 
     Choice toEntity(CreateChoiceDto choiceDto);
 

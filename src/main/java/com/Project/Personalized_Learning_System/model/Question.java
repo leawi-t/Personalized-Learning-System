@@ -1,5 +1,6 @@
 package com.Project.Personalized_Learning_System.model;
 
+import com.Project.Personalized_Learning_System.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -7,7 +8,9 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -16,8 +19,8 @@ import java.util.List;
 @Builder
 
 @Entity
-@Table(name = "question")
-public class Question {
+@Table(name = "questionText")
+public class Question extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,11 +35,10 @@ public class Question {
 
     private int difficulty;
 
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    @ElementCollection
+    @CollectionTable(name = "question_tags", joinColumns = @JoinColumn(name = "question_id"))
+    @Column(name = "tag")
+    private Set<String> tags = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="topicId", nullable = false)
@@ -44,4 +46,9 @@ public class Question {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Choice> choices = new ArrayList<>();
+
+    public void addChoice(Choice choice) {
+        choices.add(choice);
+        choice.setQuestion(this);
+    }
 }
