@@ -11,6 +11,8 @@ public interface SubjectMapper {
 
     SubjectResponseDto toResponse(Subject subject);
 
+    List<SubjectResponseDto> toResponseList(List<Subject> subjects);
+
     SubjectDetailDto toDetail(Subject subject);
 
     Subject toEntity(SubjectRequestDto subjectRequestDto);

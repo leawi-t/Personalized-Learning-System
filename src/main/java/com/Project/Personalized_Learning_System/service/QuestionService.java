@@ -77,5 +77,10 @@ public class QuestionService {
         if (!repo.existsById(id)) throw new ResourceNotFoundException("Question not found");
         repo.deleteById(id);
     }
+
+    public QuestionResponseDto getQuestionById(long questionId) {
+        return questionMapper.toResponse(repo.findById(questionId).
+                orElseThrow(() -> new ResourceNotFoundException("Question was not found")));
+    }
 }
 

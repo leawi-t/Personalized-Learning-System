@@ -13,7 +13,7 @@ import java.util.List;
 @Builder
 
 @Entity
-@Table(name = "subjects", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "user_id"})})
+@Table(name = "subject", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "user_id"})})
 public class Subject extends BaseEntity {
 
     @Id

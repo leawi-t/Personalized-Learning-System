@@ -40,7 +40,7 @@ public class SubjectController {
         return ResponseEntity.ok(subjectService.getSubjectById(subjectId));
     }
 
-    @PostMapping // user id in dto
+    @PostMapping
     public ResponseEntity<SubjectDetailDto> createSubject(@RequestBody @Valid SubjectRequestDto dto){
         return new ResponseEntity<>(subjectService.addSubject(dto), HttpStatus.CREATED);
     }

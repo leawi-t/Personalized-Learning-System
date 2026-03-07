@@ -19,7 +19,7 @@ import java.util.Set;
 @Builder
 
 @Entity
-@Table(name = "questionText")
+@Table(name = "question")
 public class Question extends BaseEntity {
 
     @Id

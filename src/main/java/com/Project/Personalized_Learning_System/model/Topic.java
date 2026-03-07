@@ -16,7 +16,7 @@ import java.util.List;
 @Builder
 
 @Entity
-@Table(name = "topics")
+@Table(name = "topic")
 public class Topic extends BaseEntity {
 
     @Id

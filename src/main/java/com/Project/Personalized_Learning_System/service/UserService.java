@@ -29,18 +29,18 @@ public class UserService {
     }
 
     public UserDetailsDto getUserById(long userId){
-        User user = getUserEntityById(userId);
-        return userMapper.toDetails(user);
+        return userMapper.toDetails(userRepo.findById(userId)
+                .orElseThrow(()->new ResourceNotFoundException("User not found")));
     }
 
     public UserDetailsDto getUserByUsername(String username){
-        User user = userRepo.findByUsername(username).orElseThrow(()->new ResourceNotFoundException("User not found"));
-        return userMapper.toDetails(user);
+        return userMapper.toDetails(userRepo.findByUsername(username)
+                .orElseThrow(()->new ResourceNotFoundException("User not found")));
     }
 
-    public UserDetailsDto getUserByEmail(String email){
-        User user = userRepo.findByEmail(email).orElseThrow(()->new ResourceNotFoundException("User not found"));
-        return userMapper.toDetails(user);
+    public UserDetailsDto getUserByEmail(String email){;
+        return userMapper.toDetails( userRepo.findByEmail(email)
+                .orElseThrow(()->new ResourceNotFoundException("User not found")));
     }
 
     @Transactional

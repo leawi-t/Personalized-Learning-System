@@ -1,9 +1,6 @@
 package com.Project.Personalized_Learning_System;
 
-import com.Project.Personalized_Learning_System.exception.DuplicateEntityException;
-import com.Project.Personalized_Learning_System.exception.EmailAlreadyInUseException;
-import com.Project.Personalized_Learning_System.exception.IllegalOperationException;
-import com.Project.Personalized_Learning_System.exception.ResourceNotFoundException;
+import com.Project.Personalized_Learning_System.exception.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;

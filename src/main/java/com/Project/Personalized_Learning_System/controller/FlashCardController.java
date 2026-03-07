@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/flashcards")
+@RequestMapping("/api/flashcards")
 public class FlashCardController {
 
     private final FlashCardService service;

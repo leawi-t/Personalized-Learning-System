@@ -8,6 +8,6 @@ public record UserDetailsDto(
         long id,
         String username,
         String email,
-        List<SubjectResponseDto> categories
+        List<SubjectResponseDto> subjects
 ) {
 }

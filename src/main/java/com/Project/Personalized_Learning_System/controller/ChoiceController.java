@@ -15,7 +15,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/choices")
+@RequestMapping("/api/choices")
 public class ChoiceController {
 
     private final ChoiceService service;

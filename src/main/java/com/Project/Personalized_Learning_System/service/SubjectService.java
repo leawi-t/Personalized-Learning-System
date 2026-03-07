@@ -39,8 +39,8 @@ public class SubjectService {
     }
 
     public SubjectDetailDto getSubjectById(long subjectId){
-        Subject subject = getSubjectEntityById(subjectId);
-        return subjectMapper.toDetail(subject);
+        return subjectMapper.toDetail(repo.findById(subjectId)
+                .orElseThrow(()-> new ResourceNotFoundException("Subject was not found")));
     }
 
     @Transactional

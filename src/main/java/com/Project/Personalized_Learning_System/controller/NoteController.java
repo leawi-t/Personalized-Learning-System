@@ -18,13 +18,13 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/notes")
+@RequestMapping("/api/notes")
 public class NoteController {
 
     private final NoteService noteService;
 
     @GetMapping
-    public ResponseEntity<PagedModel<NoteResponseDto>> getAllNotes(
+    public ResponseEntity<PagedModel<NoteResponseDto>> getNotes(
             @RequestParam(required = false) Long topicId,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String description,

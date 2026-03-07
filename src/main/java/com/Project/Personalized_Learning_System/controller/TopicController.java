@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/topics")
+@RequestMapping("/api/topics")
 public class TopicController {
 
     private final TopicService topicService;

@@ -6,7 +6,6 @@ import jakarta.validation.constraints.Size;
 
 public record CreateChoiceDto(
 
-        @NotNull
         Long questionId,
 
         @NotBlank

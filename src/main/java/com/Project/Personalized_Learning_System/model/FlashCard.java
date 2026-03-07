@@ -24,7 +24,7 @@ import java.util.Set;
 @Setter
 
 @Entity
-@Table(name = "flashcards")
+@Table(name = "flashcard")
 public class FlashCard extends BaseEntity {
 
     @Id

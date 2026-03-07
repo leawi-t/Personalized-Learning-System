@@ -15,7 +15,7 @@ import java.sql.PreparedStatement;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/questions")
+@RequestMapping("/api/questions")
 public class QuestionController {
 
     private final QuestionService service;
@@ -27,6 +27,11 @@ public class QuestionController {
     ){
         Page<QuestionResponseDto> page = service.getQuestions(dto, pageable);
         return ResponseEntity.ok(new PagedModel<>(page));
+    }
+
+    @GetMapping("/{questionId}")
+    public ResponseEntity<QuestionResponseDto> getQuestionById(@PathVariable long questionId){
+        return ResponseEntity.ok(service.getQuestionById(questionId));
     }
 
     @PostMapping

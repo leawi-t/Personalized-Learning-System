@@ -5,7 +5,7 @@ import com.Project.Personalized_Learning_System.dto.topicDto.TopicResponseDto;
 import java.util.List;
 
 public record SubjectDetailDto(
-        long id,
+        Long id,
         String name,
         String description,
         List<TopicResponseDto> topics
