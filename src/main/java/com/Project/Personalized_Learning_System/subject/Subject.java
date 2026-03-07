@@ -1,0 +1,44 @@
+package com.Project.Personalized_Learning_System.subject;
+
+import com.Project.Personalized_Learning_System.common.BaseEntity;
+import com.Project.Personalized_Learning_System.topic.Topic;
+import com.Project.Personalized_Learning_System.user.User;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter @Setter
+@Builder
+
+@Entity
+@Table(name = "subject", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "user_id"})})
+public class Subject extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(length = 1000)
+    private String description;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Topic> topics = new ArrayList<>();
+
+    public void addTopic(Topic topic) {
+        if (topic != null) {
+            topics.add(topic);
+            topic.setSubject(this);
+        }
+    }
+}
