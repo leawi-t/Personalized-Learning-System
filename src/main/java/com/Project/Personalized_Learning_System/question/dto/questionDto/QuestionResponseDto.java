@@ -11,6 +11,7 @@ public record QuestionResponseDto(
         long id,
         String questionText,
         QuestionType questionType,
+        String explanation,
         int difficulty,
         Set<String> tags,
         List<ChoiceResponseDto> choices,

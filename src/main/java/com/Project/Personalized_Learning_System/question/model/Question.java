@@ -1,6 +1,7 @@
 package com.Project.Personalized_Learning_System.question.model;
 
 import com.Project.Personalized_Learning_System.common.BaseEntity;
+import com.Project.Personalized_Learning_System.note.Note;
 import com.Project.Personalized_Learning_System.topic.Topic;
 import jakarta.persistence.*;
 import lombok.*;
@@ -31,6 +32,9 @@ public class Question extends BaseEntity {
     @Column(nullable = false)
     private QuestionType questionType;
 
+    @Column(columnDefinition = "TEXT")
+    private String explanation;
+
     private int difficulty;
 
     @ElementCollection
@@ -39,8 +43,12 @@ public class Question extends BaseEntity {
     private Set<String> tags = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="topicId", nullable = false)
+    @JoinColumn(name="topic_id", nullable = false)
     private Topic topic;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="note_id", nullable = false)
+    private Note sourceNote;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Choice> choices = new ArrayList<>();
