@@ -1,7 +1,6 @@
 package com.Project.Personalized_Learning_System.flashCard.flashCardDto;
 
-public record FlashCardResponseDto(
-        long id,
+public record FlashCardAiResponse(
         String question,
         String answer,
         String explanation

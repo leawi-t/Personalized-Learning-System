@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 //TODO: make the filter for the tag a list of tags instead of one tag
+//TODO: add a flashcard to get by noteId
 
 @RestController
 @RequiredArgsConstructor

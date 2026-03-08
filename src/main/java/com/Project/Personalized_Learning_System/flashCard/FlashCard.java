@@ -1,6 +1,7 @@
 package com.Project.Personalized_Learning_System.flashCard;
 
 import com.Project.Personalized_Learning_System.common.BaseEntity;
+import com.Project.Personalized_Learning_System.note.Note;
 import com.Project.Personalized_Learning_System.topic.Topic;
 import jakarta.persistence.*;
 
@@ -31,12 +32,19 @@ public class FlashCard extends BaseEntity {
     @Column(nullable = false, length = 1000)
     private String answer;
 
+    @Column(columnDefinition = "TEXT")
+    private String explanation;
+
     @ElementCollection
     @CollectionTable(name = "flashcard_tags", joinColumns = @JoinColumn(name = "flashcard_id"))
     @Column(name = "tag")
     private Set<String> tags = new HashSet<>();
 
     private int difficulty;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "note_id", nullable = false)
+    private Note sourceNote;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topic_id", nullable = false)

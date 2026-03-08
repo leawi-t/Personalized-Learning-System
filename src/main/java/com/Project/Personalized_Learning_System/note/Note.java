@@ -1,9 +1,12 @@
 package com.Project.Personalized_Learning_System.note;
 
 import com.Project.Personalized_Learning_System.common.BaseEntity;
+import com.Project.Personalized_Learning_System.flashCard.FlashCard;
 import com.Project.Personalized_Learning_System.topic.Topic;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -33,7 +36,14 @@ public class Note extends BaseEntity {
     private long fileSize;
     private String filePath;
 
+    @OneToMany(mappedBy = "sourceNote")
+    private List<FlashCard> flashCards;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "topicId", nullable = false)
     private Topic topic;
+
+    public void addFlashCard(FlashCard flashCard){
+        flashCards.add(flashCard);
+    }
 }

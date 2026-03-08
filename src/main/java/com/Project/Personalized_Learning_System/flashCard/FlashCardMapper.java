@@ -1,10 +1,9 @@
 package com.Project.Personalized_Learning_System.flashCard;
 
-import com.Project.Personalized_Learning_System.flashCard.flashCardDto.FlashCardDetailDto;
-import com.Project.Personalized_Learning_System.flashCard.flashCardDto.FlashCardRequestDto;
-import com.Project.Personalized_Learning_System.flashCard.flashCardDto.FlashCardResponseDto;
-import com.Project.Personalized_Learning_System.flashCard.flashCardDto.FlashCardUpdateDto;
+import com.Project.Personalized_Learning_System.flashCard.flashCardDto.*;
 import org.mapstruct.*;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface FlashCardMapper {
@@ -16,6 +15,8 @@ public interface FlashCardMapper {
     FlashCardResponseDto toResponse(FlashCard flashCard);
 
     FlashCard toEntity(FlashCardRequestDto flashCardRequestDto);
+
+    List<FlashCard> toEntityAI(List<FlashCardAiResponse> flashCardAiResponse);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateFlashCard(FlashCardUpdateDto updateDto, @MappingTarget FlashCard flashCard);

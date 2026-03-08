@@ -9,6 +9,7 @@ public record FlashCardDetailDto(
         String topicName,
         String question,
         String answer,
+        String explanation,
         Set<String> tags,
         int difficulty,
         LocalDateTime createdAt,
