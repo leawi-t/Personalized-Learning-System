@@ -3,7 +3,6 @@ package com.Project.Personalized_Learning_System.topic;
 import com.Project.Personalized_Learning_System.flashCard.FlashCardMapper;
 import com.Project.Personalized_Learning_System.note.NoteMapper;
 import com.Project.Personalized_Learning_System.question.mapper.QuestionMapper;
-import com.Project.Personalized_Learning_System.subject.Subject;
 import com.Project.Personalized_Learning_System.subject.SubjectMapper;
 import com.Project.Personalized_Learning_System.topic.topicDto.TopicDetailDto;
 import com.Project.Personalized_Learning_System.topic.topicDto.TopicRequestDto;

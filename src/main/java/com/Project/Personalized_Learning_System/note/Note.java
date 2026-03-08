@@ -25,6 +25,7 @@ public class Note extends BaseEntity {
     @Column(length = 1000)
     private String description;
 
+    @Column(columnDefinition = "TEXT")
     private String summary;
 
     private String fileName;

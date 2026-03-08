@@ -29,7 +29,8 @@ public class LocalFileStorageService implements FileStorageService {
     public String saveFile(MultipartFile file) {
         try {
             String uniqueName = UUID.randomUUID() + "_" + file.getOriginalFilename();
-            Path destination = root.resolve(uniqueName);
+            Path destination = root.resolve(uniqueName).toAbsolutePath();
+
             Files.copy(file.getInputStream(), destination);
             return destination.toString();
         } catch (IOException e) {
