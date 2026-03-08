@@ -4,14 +4,14 @@ import com.Project.Personalized_Learning_System.note.Note;
 import com.Project.Personalized_Learning_System.note.NoteRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.document.Document;
+import org.springframework.ai.reader.tika.TikaDocumentReader;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
-import java.net.URI;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,15 +42,23 @@ public class NoteAiService {
         return summary;
     }
 
-    public String readFileContent(String filePath){
+    public String readFileContent(String filePath) {
         try {
-            return Files.readString(Path.of(URI.create("file:///" + filePath.replace("\\", "/"))));
+            // 1. Convert the file path to a Spring Resource
+            // Using "file:" prefix ensures it looks at your local disk
+            Resource resource = new FileSystemResource(filePath);
+
+            // 2. Initialize the Tika reader with the resource
+            TikaDocumentReader reader = new TikaDocumentReader(resource);
+
+            // 3. Read the document(s) and join the text
+            // Tika returns a List of Documents (usually 1 for standard files)
+            return reader.get().stream()
+                    .map(Document::getText)
+                    .collect(Collectors.joining("\n"));
+
         } catch (Exception e) {
-            try {
-                return Files.readString(Paths.get(filePath));
-            } catch (IOException ex) {
-                throw new RuntimeException("AI could not read the note file: " + ex.getMessage());
-            }
+            throw new RuntimeException("AI failed to read document: " + e.getMessage());
         }
     }
 }
