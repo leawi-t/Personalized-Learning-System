@@ -23,18 +23,25 @@ A "Smart" Backend infrastructure built with Spring Boot 4 and Spring AI. This sy
 
 # 📂 Project Structure 
 
-(AI Focus)Plaintextsrc/main/java/com/Project/Personalized_Learning_System/
-├── common/
+```
+src/main/java/com/Project/Personalized_Learning_System/
+├── common/                  # Shared utilities and infrastructure
 │   └── fileStorage/         # Handles Absolute Path storage for documents
-├── modules/
-│   ├── note/                # Core Entity: The "Source of Truth"
-│   ├── ai/
+├── note/                    # Core Module: The "Source of Truth"
+│   ├── ai/                  # AI Integration Sub-module
 │   │   ├── dto/             # AI Response Records (FlashcardAiResponse, etc.)
 │   │   ├── NoteAiService.java    # The "Brain": Handles ChatClient prompts
 │   │   └── NoteAiController.java # Endpoints for AI generation
-│   ├── flashcard/           # AI-generated Flashcards
-│   └── question/            # AI-generated MCQs with nested Choices
-
+│   ├── Note.java            # Note Entity
+│   └── NoteRepo.java        # Note Repository
+├── flashCard/               # Module for AI-generated Flashcards
+│   ├── FlashCard.java       # Flashcard Entity
+│   └── FlashCardRepo.java   # Flashcard Repository
+└── question/                # Module for AI-generated MCQs
+    ├── Question.java        # Question Entity (Parent)
+    ├── Choice.java          # Choice Entity (Child)
+    └── QuestionRepo.java    # Question Repository
+```
 
 # ⚙️ Configuration
 
@@ -50,11 +57,11 @@ spring.ai.openai.chat.options.model=llama-3.3-70b-versatile
 
 # 🛣️ API Endpoints (AI Features)
 
-Method         Endpoint                            Description
-GET        /api/notes/{id}/summarize       Returns/Generates a 3-point summary.
-POST       /api/notes/{id}/flashcardsm     Generates 5 flashcards from the note content.
-POST       /api/notes/{id}/questions       Generates 3 MCQs with choices and explanations.
-
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `GET` | `/api/notes/{id}/summarize` | Returns/Generates a 3-point summary. |
+| `POST` | `/api/notes/{id}/flashcards` | Generates 5 flashcards from the note content. |
+| `POST` | `/api/notes/{id}/questions` | Generates 3 MCQs with choices and explanations. |
 
 # 🔧 Database Schema Logic
 
