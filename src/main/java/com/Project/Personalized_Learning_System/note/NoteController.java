@@ -1,4 +1,4 @@
-package com.Project.Personalized_Learning_System.note.controller;
+package com.Project.Personalized_Learning_System.note;
 
 import com.Project.Personalized_Learning_System.note.noteDto.NoteDetailDto;
 import com.Project.Personalized_Learning_System.note.noteDto.NoteRequestDto;

@@ -1,4 +1,4 @@
-package com.Project.Personalized_Learning_System.note.service;
+package com.Project.Personalized_Learning_System.note.ai;
 
 import com.Project.Personalized_Learning_System.flashCard.FlashCard;
 import com.Project.Personalized_Learning_System.flashCard.FlashCardMapper;
@@ -6,6 +6,7 @@ import com.Project.Personalized_Learning_System.flashCard.FlashCardRepo;
 import com.Project.Personalized_Learning_System.flashCard.flashCardDto.FlashCardAiResponse;
 import com.Project.Personalized_Learning_System.note.Note;
 import com.Project.Personalized_Learning_System.note.NoteRepo;
+import com.Project.Personalized_Learning_System.note.service.NoteService;
 import com.Project.Personalized_Learning_System.question.dto.questionDto.QuestionAiResponse;
 import com.Project.Personalized_Learning_System.question.mapper.QuestionMapper;
 import com.Project.Personalized_Learning_System.question.model.Choice;
@@ -15,7 +16,6 @@ import com.Project.Personalized_Learning_System.topic.Topic;
 import com.Project.Personalized_Learning_System.topic.TopicRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.StructuredOutputValidationAdvisor;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.reader.tika.TikaDocumentReader;
 import org.springframework.core.ParameterizedTypeReference;

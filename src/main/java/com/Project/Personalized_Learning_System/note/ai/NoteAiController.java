@@ -1,7 +1,6 @@
-package com.Project.Personalized_Learning_System.note.controller;
+package com.Project.Personalized_Learning_System.note.ai;
 
 import com.Project.Personalized_Learning_System.flashCard.flashCardDto.FlashCardAiResponse;
-import com.Project.Personalized_Learning_System.note.service.NoteAiService;
 import com.Project.Personalized_Learning_System.question.dto.questionDto.QuestionAiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +23,12 @@ public class NoteAiController {
         return ResponseEntity.ok(service.summarize(noteId));
     }
 
-    @GetMapping("/{noteId}/generate/flashCards")
+    @GetMapping("/{noteId}/flashCards")
     public ResponseEntity<List<FlashCardAiResponse>> generateFlashCards(@PathVariable Long noteId){
         return ResponseEntity.ok(service.generateFlashcards(noteId));
     }
 
-    @GetMapping("/{noteId}/generate/questions")
+    @GetMapping("/{noteId}/questions")
     public ResponseEntity<List<QuestionAiResponse>> generateQuestions(@PathVariable Long noteId){
         return ResponseEntity.ok(service.generateQuestions(noteId));
     }
